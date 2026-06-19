@@ -18,6 +18,9 @@ export function processFill(
   const oldPosition = state.position;
   const newPosition = oldPosition + direction;
 
+  // Update cash balance
+  state.balance += fillSide === "BUY" ? -fillPrice : fillPrice;
+
   // Determine if this fill increases or decreases position magnitude
   const oldMagnitude = Math.abs(oldPosition);
   const newMagnitude = Math.abs(newPosition);

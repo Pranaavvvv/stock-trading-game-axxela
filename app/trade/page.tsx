@@ -37,11 +37,14 @@ export default function TradePage() {
   const [selfUsername, setSelfUsername] = useState("");
   const [selfRoomId, setSelfRoomId] = useState("");
   const [selfSeatIndex, setSelfSeatIndex] = useState(0);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
 
   // Player state
   const [position, setPosition] = useState(0);
   const [avgPrice, setAvgPrice] = useState(0);
   const [realizedPnl, setRealizedPnl] = useState(0);
+  const [balance, setBalance] = useState(0);
   const [restingOrders, setRestingOrders] = useState<Order[]>([]);
 
   // Order book
@@ -95,7 +98,10 @@ export default function TradePage() {
         setPlayers(msg.users);
         // Find our seat index
         const me = msg.users.find((u) => u.username === selfUsername);
-        if (me) setSelfSeatIndex(me.absoluteSeatIndex);
+        if (me) {
+          setSelfSeatIndex(me.absoluteSeatIndex);
+          setIsAdmin(me.isAdmin);
+        }
         break;
 
       case "ROUND_INIT": {
@@ -117,7 +123,10 @@ export default function TradePage() {
         setDigitMask(msg.digitMask);
 
         const myInfo = msg.players.find((u) => u.username === selfUsername);
-        if (myInfo) setSelfSeatIndex(myInfo.absoluteSeatIndex);
+        if (myInfo) {
+          setSelfSeatIndex(myInfo.absoluteSeatIndex);
+          setIsAdmin(myInfo.isAdmin);
+        }
         break;
       }
 
@@ -198,18 +207,23 @@ export default function TradePage() {
         setPhase(msg.phase);
         setRound(msg.round);
         setSecondsRemaining(msg.secondsRemaining);
+        setIsPaused(msg.isPaused || false);
         setDigitMask(msg.digitMask);
         prevDigitMaskRef.current = msg.digitMask;
         setPlayers(msg.players);
         setPosition(msg.playerState.position);
         setAvgPrice(msg.playerState.avgPrice);
         setRealizedPnl(msg.playerState.realizedPnl);
+        setBalance(msg.playerState.balance || 0);
         setBids(msg.bids);
         setAsks(msg.asks);
         setTrades(msg.trades);
 
         const myP = msg.players.find((u) => u.username === selfUsername);
-        if (myP) setSelfSeatIndex(myP.absoluteSeatIndex);
+        if (myP) {
+          setSelfSeatIndex(myP.absoluteSeatIndex);
+          setIsAdmin(myP.isAdmin);
+        }
 
         setRestingOrders(
           msg.playerState.restingOrders || []
@@ -220,7 +234,12 @@ export default function TradePage() {
         setPosition(msg.playerState.position);
         setAvgPrice(msg.playerState.avgPrice);
         setRealizedPnl(msg.playerState.realizedPnl);
+        setBalance(msg.playerState.balance || 0);
         setRestingOrders(msg.playerState.restingOrders || []);
+        break;
+
+      case "GAME_PAUSED_STATE":
+        setIsPaused(msg.isPaused);
         break;
     }
   }, [lastMessage, selfUsername, router]);
@@ -231,6 +250,10 @@ export default function TradePage() {
     },
     [send]
   );
+
+  const handleTogglePause = useCallback(() => {
+    send({ type: "TOGGLE_PAUSE" });
+  }, [send]);
 
   // Compute egocentric seating
   const displaySeats = getDisplaySeating(players, selfSeatIndex);
@@ -244,7 +267,13 @@ export default function TradePage() {
     <div className="h-screen flex overflow-hidden">
       {/* ── Left Region: Table Area (~68%) ── */}
       <div className="flex-[68] flex flex-col min-w-0">
-        <GameHeader round={round} secondsRemaining={secondsRemaining} />
+        <GameHeader
+          round={round}
+          secondsRemaining={secondsRemaining}
+          isPaused={isPaused}
+          isAdmin={isAdmin}
+          onTogglePause={handleTogglePause}
+        />
         <TableSurface
           digitMask={digitMask}
           seats={displaySeats}
@@ -292,7 +321,7 @@ export default function TradePage() {
       {/* ── Right Region: Sidebar Panel (~32%) ── */}
       <div className="flex-[32] flex flex-col bg-panel-bg border-l border-white/[0.06] overflow-y-auto">
         <div className="p-6 space-y-4">
-          <StatsRow pnl={realizedPnl} openPositions={position} />
+          <StatsRow pnl={realizedPnl} openPositions={position} balance={balance} />
 
           <OrderEntry
             onPlaceOrder={handlePlaceOrder}

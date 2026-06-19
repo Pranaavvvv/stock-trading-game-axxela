@@ -179,6 +179,27 @@ wss.on("connection", (ws: WebSocket) => {
           break;
         }
 
+        case "TOGGLE_PAUSE": {
+          const user = socketToUser.get(ws);
+          if (!user) {
+            ws.send(JSON.stringify({ type: "ERROR", message: "Not joined" }));
+            return;
+          }
+          const engine = rooms.get(user.roomId);
+          if (!engine) return;
+
+          const result = engine.togglePause(user.username);
+          if (!result.success) {
+            ws.send(
+              JSON.stringify({
+                type: "ERROR",
+                message: result.error || "Cannot pause game"
+              })
+            );
+          }
+          break;
+        }
+
         default:
           ws.send(JSON.stringify({ type: "ERROR", message: "Unknown message type" }));
       }

@@ -39,6 +39,7 @@ export class GameEngine {
 
   // ── Timers ──
   private roundTimer: ReturnType<typeof setInterval> | null = null;
+  public isPaused: boolean = false;
 
   // ── Broadcast function (injected by ws-server) ──
   private broadcast: BroadcastFn;
@@ -101,6 +102,7 @@ export class GameEngine {
       position: 0,
       avgPrice: 0,
       realizedPnl: 0,
+      balance: 0,
       restingOrders: [],
     });
 
@@ -207,6 +209,8 @@ export class GameEngine {
 
     // Start round timer
     this.roundTimer = setInterval(() => {
+      if (this.isPaused) return;
+
       this.secondsRemaining--;
 
       this.broadcast({
@@ -247,6 +251,8 @@ export class GameEngine {
       });
 
       const intermissionTimer = setInterval(() => {
+        if (this.isPaused) return;
+
         this.secondsRemaining--;
         this.broadcast({
           type: "TIMER_TICK",
@@ -296,6 +302,21 @@ export class GameEngine {
   // ══════════════════════════════════════════════
   // ORDER HANDLING
   // ══════════════════════════════════════════════
+
+  togglePause(username: string): { success: boolean; error?: string } {
+    if (username !== this.adminUsername) {
+      return { success: false, error: "Only admin can pause the game" };
+    }
+
+    this.isPaused = !this.isPaused;
+
+    this.broadcast({
+      type: "GAME_PAUSED_STATE",
+      isPaused: this.isPaused,
+    });
+
+    return { success: true };
+  }
 
   placeOrder(
     username: string,
@@ -372,6 +393,7 @@ export class GameEngine {
       position: 0,
       avgPrice: 0,
       realizedPnl: 0,
+      balance: 0,
       restingOrders: [],
     };
 
@@ -380,6 +402,7 @@ export class GameEngine {
       phase: this.phase,
       round: this.round,
       secondsRemaining: this.secondsRemaining,
+      isPaused: this.isPaused,
       digitMask: this.digitMask,
       players: Array.from(this.players.values()),
       playerState: ps,

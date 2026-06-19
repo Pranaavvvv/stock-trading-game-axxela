@@ -41,6 +41,7 @@ export interface PlayerState {
   position: number; // -2 to +2
   avgPrice: number;
   realizedPnl: number;
+  balance: number;
   restingOrders: Order[];
 }
 
@@ -84,11 +85,16 @@ export interface PlaceOrderMessage {
   price: number;
 }
 
+export interface TogglePauseMessage {
+  type: "TOGGLE_PAUSE";
+}
+
 export type ClientMessage =
   | CreateRoomMessage
   | JoinRoomMessage
   | StartGameMessage
-  | PlaceOrderMessage;
+  | PlaceOrderMessage
+  | TogglePauseMessage;
 
 // ──────────────────────────────────────────────
 // Server → Client Messages
@@ -156,11 +162,17 @@ export interface GameOverMessage {
   leaderboard: LeaderboardEntry[];
 }
 
+export interface GamePausedStateMessage {
+  type: "GAME_PAUSED_STATE";
+  isPaused: boolean;
+}
+
 export interface StateSyncMessage {
   type: "STATE_SYNC";
   phase: GamePhase;
   round: number;
   secondsRemaining: number;
+  isPaused: boolean;
   digitMask: (string | null)[];
   players: PlayerInfo[];
   playerState: PlayerState;
@@ -194,4 +206,5 @@ export type ServerMessage =
   | GameOverMessage
   | StateSyncMessage
   | PlayerStateUpdateMessage
+  | GamePausedStateMessage
   | ErrorMessage;

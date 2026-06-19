@@ -250,7 +250,7 @@ export default function DemoPage() {
       {/* ── Right Region: Sidebar (read-only) ── */}
       <div className="flex-[32] flex flex-col bg-panel-bg border-l border-white/[0.06] overflow-y-auto">
         <div className="p-6 space-y-4">
-          <StatsRow pnl={0} openPositions={0} />
+          <StatsRow pnl={0} openPositions={0} balance={0} />
 
           {/* Read-only Order Entry */}
           <div className="rounded-lg border border-white/[0.06] p-4 space-y-3 opacity-50 pointer-events-none">
