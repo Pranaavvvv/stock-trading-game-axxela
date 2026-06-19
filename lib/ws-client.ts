@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import type { ServerMessage, ClientMessage } from "./types";
 
-const WS_URL = process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:3001";
+const WS_URL = process.env.NEXT_PUBLIC_WS_URL as string;
 
 let globalWs: WebSocket | null = null;
 let reconnectAttempt = 0;

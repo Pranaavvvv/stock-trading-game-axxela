@@ -20,30 +20,59 @@ const AUTO_ADVANCE_MS = 4000;
 
 export default function DemoPage() {
   const router = useRouter();
+  const [hasStarted, setHasStarted] = useState(false);
   const [frameIndex, setFrameIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
-  const autoAdvanceRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const autoAdvanceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const frame = DEMO_FRAMES[frameIndex];
   const isLastFrame = frameIndex === DEMO_FRAMES.length - 1;
   const isLeaderboardFrame = frame.round === -1;
 
-  // Auto-advance timer
+  // Voice-guided Auto-advance timer
   useEffect(() => {
-    if (isPlaying && !isLastFrame) {
-      autoAdvanceRef.current = setInterval(() => {
-        setFrameIndex((prev) =>
-          prev < DEMO_FRAMES.length - 1 ? prev + 1 : prev
-        );
-      }, AUTO_ADVANCE_MS);
+    // Only run if the user has clicked start, is playing, and there is a next frame
+    if (hasStarted && isPlaying) {
+      if (typeof window !== "undefined" && "speechSynthesis" in window) {
+        // Cancel any ongoing speech
+        window.speechSynthesis.cancel();
+
+        const utterance = new SpeechSynthesisUtterance(frame.caption);
+        utterance.rate = 1.05; // Slightly faster for good pacing
+
+        utterance.onend = () => {
+          if (!isLastFrame) {
+            // Wait 1.5 seconds after speech finishes before advancing
+            autoAdvanceRef.current = setTimeout(() => {
+              setFrameIndex((prev) =>
+                prev < DEMO_FRAMES.length - 1 ? prev + 1 : prev
+              );
+            }, 1500);
+          }
+        };
+
+        window.speechSynthesis.speak(utterance);
+      } else {
+        // Fallback for browsers without TTS: fixed 12 second delay
+        if (!isLastFrame) {
+          autoAdvanceRef.current = setTimeout(() => {
+            setFrameIndex((prev) =>
+              prev < DEMO_FRAMES.length - 1 ? prev + 1 : prev
+            );
+          }, 12000);
+        }
+      }
     }
 
     return () => {
+      if (typeof window !== "undefined" && "speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+      }
       if (autoAdvanceRef.current) {
-        clearInterval(autoAdvanceRef.current);
+        clearTimeout(autoAdvanceRef.current);
       }
     };
-  }, [isPlaying, isLastFrame]);
+  }, [hasStarted, isPlaying, isLastFrame, frameIndex, frame.caption]);
 
   // Stop auto-play on last frame
   useEffect(() => {
@@ -85,6 +114,30 @@ export default function DemoPage() {
     { username: "Demo_Alpha", pnl: -7 },
     { username: "Demo_Zeta", pnl: -10 },
   ];
+
+  if (!hasStarted) {
+    return (
+      <div className="h-screen flex items-center justify-center relative overflow-hidden">
+        <div className="text-center z-10 animate-fade-in-up">
+          <h1 className="text-[48px] font-extrabold tracking-[0.15em] text-text-primary mb-4">
+            AXXEL TUTORIAL
+          </h1>
+          <p className="text-text-secondary text-[16px] max-w-lg mx-auto mb-8">
+            Learn the core mechanics, math, and strategies of digit sum trading in this voice-guided interactive demo. Make sure your volume is turned up!
+          </p>
+          <button
+            onClick={() => setHasStarted(true)}
+            className="px-8 py-4 bg-buy-green hover:bg-green-500 rounded-xl font-bold text-white shadow-[0_0_20px_rgba(39,185,15,0.3)] transition-all hover:scale-105"
+          >
+            Start Guided Demo
+          </button>
+        </div>
+        
+        {/* Background effects */}
+        <div className="absolute inset-0 pointer-events-none opacity-20 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#D4A24E] via-transparent to-transparent"></div>
+      </div>
+    );
+  }
 
   if (isLeaderboardFrame) {
     return (

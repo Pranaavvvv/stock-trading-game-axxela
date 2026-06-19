@@ -56,7 +56,7 @@ export const DEMO_FRAMES: DemoFrame[] = [
     timeRemainingLabel: "1:28",
     orderBook: { bids: [], asks: [] },
     highlightedEvent: { type: "DIGIT_REVEALED", detail: "Round 1 begins — no digits revealed yet" },
-    caption: "Welcome to AXXEL! Round 1 starts with no information — all 6 digits are hidden. The sum could be anywhere from 0 to 54. Traders must speculate purely on intuition.",
+    caption: "Welcome to AXXEL, the digit sum trading game! On the left side of your screen is the game board where six hidden digits are seated. On the right side, you'll see the Market Order Book, your Working Orders, and the Trades panel. The goal of the game is simple: predict the sum of all six digits. Each digit can be anything from 0 to 9, meaning the final sum will be anywhere between 0 and 54. Round 1 starts with no information—all six digits are hidden. Traders must speculate purely on intuition.",
     tradesPanelSnapshot: [],
     workingOrdersSnapshot: [],
   },
@@ -69,7 +69,7 @@ export const DEMO_FRAMES: DemoFrame[] = [
       asks: [{ username: "Demo_Vega", side: "SELL", price: 32 }],
     },
     highlightedEvent: { type: "ORDER_PLACED", detail: "Demo_Gamma places a Buy at 20, Demo_Vega places a Sell at 32" },
-    caption: "Players start placing orders. Demo_Gamma bids 20 (bullish on a lower sum) while Demo_Vega offers to sell at 32. With no information, prices are spread wide — a 12-point gap between the best bid and best ask.",
+    caption: "Players start placing orders in the Order Book. Demo Gamma bids 20, which is a bullish move on a lower total sum, while Demo Vega offers to sell at 32. Because there is no information yet, the prices are spread wide. There is a 12-point gap between the highest bid and the lowest ask.",
     tradesPanelSnapshot: [],
     workingOrdersSnapshot: [],
   },
@@ -87,7 +87,7 @@ export const DEMO_FRAMES: DemoFrame[] = [
       ],
     },
     highlightedEvent: { type: "ORDER_FILLED", detail: "Demo_Alpha buys from Demo_Vega at 32!" },
-    caption: "First trade! Demo_Alpha crosses the spread — placing a Buy at 32, which matches Demo_Vega's resting Sell at 32. The execution price is always the resting (maker) order's price. Demo_Alpha now holds +1 position.",
+    caption: "We have our first trade! Demo Alpha crosses the spread, placing a Buy at 32, which automatically matches Demo Vega's resting Sell at 32. The execution price is always the resting order's price. Demo Alpha now holds a position of plus one.",
     tradesPanelSnapshot: [
       { partner: "Demo_Vega", price: 32, action: "Buy" },
     ],
@@ -101,7 +101,7 @@ export const DEMO_FRAMES: DemoFrame[] = [
     timeRemainingLabel: "1:30",
     orderBook: { bids: [], asks: [] },
     highlightedEvent: { type: "DIGIT_REVEALED", detail: "First digit revealed: 4" },
-    caption: "Round 2 — the first digit is revealed: 4. Now traders know at least 4 is locked in. Expected value shifts: 4 + (5 × 4.5) = 26.5. Watch how the order book tightens around this estimate.",
+    caption: "Round 2 begins, and the first digit is revealed on the board: it's a 4. Now, all traders know that at least 4 points are locked in. Let's do some math: The average value of a random digit from 0 to 9 is 4.5. Since there are 5 unknown digits left, we multiply 5 by 4.5 to get 22.5. Adding the known 4 gives us a new Expected Value of 26.5. Watch how the order book tightens around this new mathematical estimate.",
     tradesPanelSnapshot: [
       { partner: "Demo_Vega", price: 32, action: "Buy" },
     ],
@@ -122,7 +122,7 @@ export const DEMO_FRAMES: DemoFrame[] = [
       ],
     },
     highlightedEvent: { type: "ORDER_PLACED", detail: "Spread tightens: bids around 24-25, asks around 28-29" },
-    caption: "The spread narrows significantly! With one digit known, traders cluster around the expected value of ~26.5. The bid-ask spread has shrunk from 12 points to just 3. Information reduces uncertainty.",
+    caption: "Look at the Order Book now. The spread narrows significantly! With one digit known, traders are clustering their bids and asks around the expected value of 26.5. The bid-ask spread has shrunk from 12 points down to just 3 points. Information instantly reduces market uncertainty.",
     tradesPanelSnapshot: [
       { partner: "Demo_Vega", price: 32, action: "Buy" },
     ],
@@ -138,7 +138,7 @@ export const DEMO_FRAMES: DemoFrame[] = [
     timeRemainingLabel: "1:30",
     orderBook: { bids: [], asks: [] },
     highlightedEvent: { type: "DIGIT_REVEALED", detail: "Second digit revealed: 8" },
-    caption: "Round 3 — second digit is 8! That's a high digit. New expected value: 4 + 8 + (4 × 4.5) = 30. The market should adjust upward. Demo_Alpha's earlier buy at 32 is looking less aggressive now.",
+    caption: "Round 3. The second digit is revealed, and it's an 8! That is a very high digit. Our new expected value calculation is: 4 plus 8, which is 12, plus 4 unknown digits times 4.5, giving us exactly 30. The market should adjust upward immediately. Demo Alpha's earlier buy at 32 is looking much less aggressive now.",
     tradesPanelSnapshot: [
       { partner: "Demo_Vega", price: 32, action: "Buy" },
     ],
@@ -157,7 +157,7 @@ export const DEMO_FRAMES: DemoFrame[] = [
       ],
     },
     highlightedEvent: { type: "ORDER_FILLED", detail: "Demo_Theta sells to Demo_Gamma at 28" },
-    caption: "Demo_Gamma gets more aggressive, buying at 28. The 8 shifted expected value up — everyone recalculates. Trades are happening closer to the evolving fair value estimate of ~30.",
+    caption: "Demo Gamma gets more aggressive, buying at 28. The high digit 8 shifted the expected value up, and everyone is rapidly recalculating. Trades are now happening closer to the evolving fair value estimate of 30.",
     tradesPanelSnapshot: [
       { partner: "Demo_Gamma", price: 28, action: "Sell" },
       { partner: "Demo_Vega", price: 32, action: "Buy" },
@@ -172,7 +172,7 @@ export const DEMO_FRAMES: DemoFrame[] = [
     timeRemainingLabel: "1:30",
     orderBook: { bids: [], asks: [] },
     highlightedEvent: { type: "DIGIT_REVEALED", detail: "Third digit revealed: 3" },
-    caption: "Round 4 — third digit is 3. Expected value: 4 + 8 + 3 + (3 × 4.5) = 28.5. The estimate dipped slightly. Three digits known, three to go — uncertainty is shrinking with each reveal.",
+    caption: "Round 4. The third digit is a 3. The new expected value is 4 plus 8 plus 3, plus 3 unknowns times 4.5, which equals 28.5. The estimate dipped slightly. Three digits are known, and three are left. The uncertainty is shrinking with each round.",
     tradesPanelSnapshot: [
       { partner: "Demo_Gamma", price: 28, action: "Sell" },
       { partner: "Demo_Vega", price: 32, action: "Buy" },
@@ -192,7 +192,7 @@ export const DEMO_FRAMES: DemoFrame[] = [
       ],
     },
     highlightedEvent: { type: "POSITION_CAPPED", detail: "Demo_Alpha hits +2 position limit!" },
-    caption: "⚠️ Demo_Alpha tries to buy again but hits the +2 position cap! With 2 contracts already long, the Buy button is disabled. This is the maximum you can hold in one direction. Demo_Alpha must wait or sell to free up capacity.",
+    caption: "Attention! Demo Alpha tries to buy again but hits the plus 2 position cap. In AXXEL, you can only hold a maximum position of plus 2 or minus 2 at any time. Because they already hold 2 long contracts, their Buy button is disabled. Demo Alpha must wait, or sell a contract, to free up their trading capacity.",
     tradesPanelSnapshot: [
       { partner: "Demo_Gamma", price: 28, action: "Sell" },
       { partner: "Demo_Vega", price: 32, action: "Buy" },
@@ -209,7 +209,7 @@ export const DEMO_FRAMES: DemoFrame[] = [
     timeRemainingLabel: "1:30",
     orderBook: { bids: [], asks: [] },
     highlightedEvent: { type: "DIGIT_REVEALED", detail: "Fourth digit revealed: 1" },
-    caption: "Round 5 — fourth digit is 1. Expected value: 4 + 8 + 3 + 1 + (2 × 4.5) = 25. Only 2 unknown digits remain. The price range is narrowing dramatically — the sum must be between 16 (if both unknowns are 0) and 34 (if both are 9).",
+    caption: "Round 5. The fourth digit is a 1. The expected value is now 25. Only 2 unknown digits remain. The absolute bounds of the price range are narrowing dramatically. The sum must be at least 16 if both unknowns are 0, and at most 34 if both are 9.",
     tradesPanelSnapshot: [
       { partner: "Demo_Gamma", price: 28, action: "Sell" },
       { partner: "Demo_Vega", price: 32, action: "Buy" },
@@ -231,7 +231,7 @@ export const DEMO_FRAMES: DemoFrame[] = [
       ],
     },
     highlightedEvent: { type: "ORDER_FILLED", detail: "Tight market — only 2 points between best bid and ask" },
-    caption: "The market is very tight now! Best bid at 24, best ask at 26 — just a 2-point spread. With 4 digits known, experienced traders are converging on similar estimates. Every tick of information sharpens the market.",
+    caption: "The market is extremely tight now! The best bid is at 24, and the best ask is at 26. Just a 2-point spread. With 4 digits known, experienced traders are converging on very similar estimates. Every tick of information sharpens the market.",
     tradesPanelSnapshot: [
       { partner: "Demo_Gamma", price: 28, action: "Sell" },
       { partner: "Demo_Vega", price: 32, action: "Buy" },
@@ -248,7 +248,7 @@ export const DEMO_FRAMES: DemoFrame[] = [
     timeRemainingLabel: "1:30",
     orderBook: { bids: [], asks: [] },
     highlightedEvent: { type: "DIGIT_REVEALED", detail: "Fifth digit revealed: 0" },
-    caption: "Round 6 — fifth digit is 0! Only one digit unknown. Sum so far: 4+8+3+1+0 = 16. The final sum will be between 16 and 25 (since the last digit is 0-9). Expected value: 16 + 4.5 = 20.5.",
+    caption: "Round 6. The fifth digit is a 0! Only a single digit remains unknown. The sum of the visible digits is 16. The final sum is guaranteed to be between 16 and 25. The mathematical expected value is exactly 20.5.",
     tradesPanelSnapshot: [
       { partner: "Demo_Gamma", price: 28, action: "Sell" },
       { partner: "Demo_Vega", price: 32, action: "Buy" },
@@ -268,7 +268,7 @@ export const DEMO_FRAMES: DemoFrame[] = [
       ],
     },
     highlightedEvent: { type: "ORDER_FILLED", detail: "Final round trading — razor-thin spread" },
-    caption: "The spread is just 1 point! With only a single unknown digit, everyone knows the range is 16-25. The market is incredibly efficient now — compare this to Round 1's 12-point spread. This price convergence is the key insight of AXXEL.",
+    caption: "The spread is just 1 point! Everyone knows the exact range is 16 to 25. The market is incredibly efficient now. Compare this to the 12-point spread back in Round 1. This rapid price convergence is the core mechanic of AXXEL.",
     tradesPanelSnapshot: [
       { partner: "Demo_Alpha", price: 21, action: "Buy" },
       { partner: "Demo_Gamma", price: 28, action: "Sell" },
@@ -284,7 +284,7 @@ export const DEMO_FRAMES: DemoFrame[] = [
     timeRemainingLabel: "—",
     orderBook: { bids: [], asks: [] },
     highlightedEvent: { type: "SETTLEMENT", detail: "Final digit revealed: 9! Sum = 25" },
-    caption: "🎯 Settlement! The last digit is 9 — the final sum is 4+8+3+1+0+9 = 25. All open positions are automatically closed at 25. Players who bought below 25 profit; those who sold below 25 take losses. The leaderboard reveals who read the market best!",
+    caption: "Game over! Settlement time! The last digit is 9, making the final sum exactly 25. All open positions are automatically closed at a price of 25. Players who bought below 25 profit, while those who sold below 25 take losses. The leaderboard is about to reveal who read the market best!",
     tradesPanelSnapshot: [
       { partner: "Demo_Alpha", price: 21, action: "Buy" },
       { partner: "Demo_Gamma", price: 28, action: "Sell" },
@@ -300,7 +300,7 @@ export const DEMO_FRAMES: DemoFrame[] = [
     timeRemainingLabel: "—",
     orderBook: { bids: [], asks: [] },
     highlightedEvent: { type: "SETTLEMENT", detail: "Final leaderboard" },
-    caption: "Game over! The leaderboard shows final PnL for all players. Ready to try it yourself? Head to the lobby and play a real game — your experience watching this demo will give you a head start!",
+    caption: "The leaderboard is up, showing the final realized profit and loss for all players. Are you ready to try it yourself? Head back to the lobby, create a room, and invite some friends to play a real game! Your experience watching this tutorial gives you a huge head start.",
     tradesPanelSnapshot: [],
     workingOrdersSnapshot: [],
   },
