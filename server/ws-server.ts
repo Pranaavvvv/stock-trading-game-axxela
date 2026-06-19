@@ -2,7 +2,7 @@ import { WebSocketServer, WebSocket } from "ws";
 import type { ClientMessage, ServerMessage } from "../lib/types";
 import { GameEngine, BroadcastFn } from "./gameEngine";
 
-const PORT = parseInt(process.env.WS_PORT || "3001", 10);
+const PORT = parseInt(process.env.PORT || process.env.WS_PORT || "3001", 10);
 
 // ── Rooms ──
 const rooms = new Map<string, GameEngine>();
